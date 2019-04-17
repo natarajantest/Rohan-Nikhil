@@ -1,0 +1,59 @@
+package package2;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+public class Assignment {
+
+	public static void main(String[] args) throws InterruptedException
+	{
+		WebDriver driver= new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.get("https://demo.openemr.io/d/openemr");
+		driver.findElement(By.id("authUser")).sendKeys("admin");
+		driver.findElement(By.id("clearPass")).sendKeys("pass");
+		driver.findElement(By.xpath("//button[@class='btn btn-default btn-lg']")).click();
+		//patient client
+		Actions act=new Actions(driver);
+		act.moveToElement(driver.findElement(By.xpath("//div[text()='Patient/Client']"))).build().perform();
+	//	driver.findElement(By.linkText("Patient/Client")).click();
+		//new search
+		driver.findElement(By.xpath("//div[text()='New/Search']")).click();
+	//	driver.findElement(By.className("form-control")).click();
+		driver.switchTo().frame(driver.findElement(By.name("pat")));
+		//FirstName
+		driver.findElement(By.name("form_fname")).sendKeys("Shital");
+		//LastName
+		 driver.findElement(By.name("form_lname")).sendKeys("Gaikwad");
+		 //dob
+		 driver.findElement(By.name("form_DOB")).click();
+	//	driver.findElement(By.xpath("//data-date[class='xdsoft_date xdsoft_day_of_week3 xdsoft_date xdsoft_current xdsoft_today']")).click();
+		driver.findElement(By.name("form_DOB")).sendKeys("17/04/2019");
+		//sex
+		driver.findElement(By.id("form_sex")).click();
+		Select sc=new Select(driver.findElement(By.id("form_sex")));
+		sc.selectByValue("Female");
+		//button
+		driver.findElement(By.id("create")).click();
+		//confirm
+		driver.switchTo().defaultContent();
+		driver.switchTo().frame(driver.findElement(By.id("modalframe")));
+		driver.findElement(By.xpath("//input[@value='Confirm Create New Patient']")).click();
+		//ok
+		Thread.sleep(5000);
+		driver.switchTo().alert().accept();
+		//cross button
+		driver.findElement(By.className("closeDlgIframe")).click();
+		//billy smith
+		act.moveToElement(driver.findElement(By.xpath("//span[text()='Billy']"))).build().perform();
+		//logout
+		driver.findElement(By.xpath("//li[text()='Logout']")).click();
+	}	
+
+}
